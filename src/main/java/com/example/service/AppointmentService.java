@@ -17,25 +17,17 @@ public class AppointmentService {
     private final SalonServiceRepository salonServiceRepository;
 
     // Yeni bir randevu oluştur
+    // Yeni bir randevu oluştur
     public Appointment createAppointment(Appointment appointment) {
-        // Hizmetin adını kullanarak tüm eşleşmeleri bul
-        List<SalonService> salonServices = salonServiceRepository.findAllByName(appointment.getSalonService().getName());
-        if (salonServices.isEmpty()) {
-            throw new RuntimeException("Hizmet bulunamadı!");
+        // Hizmet adını kontrol etmeden doğrudan kaydet
+        if (appointment.getSalonServiceName() == null || appointment.getSalonServiceName().isEmpty()) {
+            throw new RuntimeException("Hizmet adı eksik!");
         }
 
-        // İlk eşleşen hizmeti kullan
-        SalonService salonService = salonServices.get(0);
-
-        // Hizmetin fiyatını ata
-        appointment.setPrice(salonService.getPrice());
-
-        // Hizmeti ata
-        appointment.setSalonService(salonService);
-
-        // Kaydet ve döndür
+        // Randevuyu kaydet ve döndür
         return appointmentRepository.save(appointment);
     }
+
 
 
 

@@ -1,12 +1,11 @@
 package com.example.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -20,14 +19,11 @@ public class Appointment {
 
     private String customerName; // Randevuyu alan müşterinin adı
 
-    private LocalDateTime appointmentDate; // Randevu tarihi ve saati
+    private LocalDate appointmentDate; // Randevu tarihi (sadece gün/ay/yıl)
 
-    private String phoneNumber; // Müşterinin telefon numarası
+    private String phoneNumber; // Müşterinin telefon numarası (herhangi bir format kontrolü yok)
 
-    @ManyToOne
-    @JoinColumn(name = "service_id", nullable = false) // Yabancı anahtar kolonu
-    @JsonBackReference // JSON serileştirmede döngüyü kırmak için
-    private SalonService salonService; // Randevunun ilişkili olduğu hizmet
+    private String salonServiceName; // Hizmet adı
 
     private double price; // Hizmetin fiyatı (yeni alan)
 

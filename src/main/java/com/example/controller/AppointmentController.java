@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/appointments")
@@ -16,14 +18,24 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     // Yeni bir randevu oluştur
-    @PostMapping("/create") // http://localhost:8080/api/appointments/create + POST
-    public ResponseEntity<String> createAppointment(@RequestBody Appointment appointment) {
-        Appointment savedAppointment = appointmentService.createAppointment(appointment);
-        return ResponseEntity.ok("Randevunuz başarıyla oluşturuldu! Müşteri: "
-                + savedAppointment.getCustomerName() + ", Tarih: "
-                + savedAppointment.getAppointmentDate() + ", Hizmet: "
-                + savedAppointment.getSalonService().getName() + ", Fiyat: "
-                + savedAppointment.getPrice());
+    @PostMapping("/create")
+    public ResponseEntity<?> createAppointment(@RequestBody Appointment appointment) {
+        System.out.println("Gelen JSON: " + appointment); // Gelen JSON'u kontrol ediyoruz.
+        try {
+            Appointment savedAppointment = appointmentService.createAppointment(appointment);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Randevunuz başarıyla oluşturuldu! Müşteri: "
+                    + savedAppointment.getCustomerName() + ", Tarih: "
+                    + savedAppointment.getAppointmentDate() + ", Hizmet: "
+                    + savedAppointment.getSalonServiceName() + ", Fiyat: "
+                    + savedAppointment.getPrice());
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            System.out.println("Hata: " + e.getMessage()); // Hata detaylarını loglayın
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
     }
 
 
