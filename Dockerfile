@@ -14,4 +14,4 @@ RUN chmod +x ./mvnw
 RUN ./mvnw clean package -DskipTests
 
 # Uygulamayı çalıştır
-CMD ["java", "-jar", "target/legalchecker-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/beauty-salon-0.0.1-SNAPSHOT.jar"]
